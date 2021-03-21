@@ -1,23 +1,27 @@
 package models;
 
+import Impl.spartanDrinkImpl;
+import Impl.spartanPeeImpl;
 import interfaces.Drink;
 import interfaces.Pee;
+import interfaces.extraMethods;
 
-public class Spartan extends Human implements Drink, Pee{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-    private int toleranciaExtra;
+public class Spartan extends Human implements Drink, Pee, extraMethods {
 
-    public Spartan(String name, int age, int weigth, int totalEndurance, Drink drink, Pee pee, int toleranciaExtra) {
-        super(name, age, weigth, totalEndurance, drink, pee);
-        this.toleranciaExtra = toleranciaExtra;
+    private int extraTolerance;
+
+    public Spartan(String name, int age, int weigth, Drink drink, Pee pee) {
+        super(name, age, weigth, drink, pee);
+        this.extraTolerance = (int) ((int) age*0.8); /*Depends how old is the Spartan, gains "extraTolerance". This stat
+        is an addition to totalEndurance*/
     }
 
-    public int getToleranciaExtra() {
-        return toleranciaExtra;
-    }
-
-    public void setToleranciaExtra(int toleranciaExtra) {
-        this.toleranciaExtra = toleranciaExtra;
+    public int getExtraTolerance() {
+        return extraTolerance;
     }
 
     @Override
@@ -26,21 +30,45 @@ public class Spartan extends Human implements Drink, Pee{
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", weigth=" + weigth +
-                ", totalEndurance=" + totalEndurance +
+                ", total Endurance=" + totalEndurance +
                 ", drink=" + drink +
                 ", pee=" + pee +
-                ", enduranceLeft=" + enduranceLeft +
-                ", toleranciaExtra=" + toleranciaExtra +
+                ", endurance Left=" + enduranceLeft +
+                ", extra Tolerance=" + extraTolerance +
                 '}';
     }
 
     @Override
     public Integer drink() {
-        return drink.drink();
+        return drink.drink(); //Acá falta que afecte el "extraTolerance"
     }
 
     @Override
     public void pee() {
         pee.pee();
+    }
+
+    @Override
+    public Integer getRandom(int min, int max) {
+        int i = ThreadLocalRandom.current().nextInt(min, max)+1;
+        return i;
+    }
+
+
+    @Override
+    public ArrayList generateTeam() {
+        List<Spartan> spartanList = new ArrayList<Spartan>();
+        for (int i=0; i<11; i++){
+            spartanList.add(
+                    new Spartan(
+                            "Spartan N° " + i,
+                            getRandom(18,90),
+                            getRandom(50,160),
+                            new spartanDrinkImpl(),
+                            new spartanPeeImpl()
+                    )
+            );
+        }
+        return (ArrayList) spartanList;
     }
 }
