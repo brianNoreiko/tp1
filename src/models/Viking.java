@@ -1,23 +1,19 @@
 package models;
 
-import Impl.vikingDrinkImpl;
-import Impl.vikingPeeImpl;
 import interfaces.Drink;
 import interfaces.Pee;
-import interfaces.extraMethods;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-public class Viking extends Human implements Drink, Pee, extraMethods {
+public class Viking extends Human implements Drink, Pee {
    private int professionalDrinker;
 
    public Viking(String name, int age, int weigth, Drink drink, Pee pee) {
       super(name, age, weigth, drink, pee);
-      /*this.professionalDrinker = (int)(int weigth * );*/ /*Todavía no se como definir esto. La idea es utilizar el peso
-      para generar un número y que eso influya a través de "professionalDrinker" en el resultado del "totalEndurance" */
+      this.professionalDrinker = 20; /* All the vikings have 20% alcohol tolerance. This means that beer only affect them
+      by 80% on the total endurance*/
+      this.setEnduranceLeft(this.totalEndurance);
    }
+
+
 
    public int getProfessionalDrinker() {
       return professionalDrinker;
@@ -25,13 +21,7 @@ public class Viking extends Human implements Drink, Pee, extraMethods {
 
    @Override
    public Integer drink() {
-      Integer quantity  = drink.drink(); //Acá falta que afecte el "professionalDrinker"
-      return subtractEndurance(quantity);
-
-   }
-
-   private Integer subtractEndurance(Integer quantity) {
-   return  null; //Tengo que hacer esta funcion
+      return ((this.professionalDrinker*(drink.drink()))/100);
    }
 
    @Override
@@ -46,36 +36,33 @@ public class Viking extends Human implements Drink, Pee, extraMethods {
               ", age=" + age +
               ", weigth=" + weigth +
               ", total Endurance=" + totalEndurance +
-              ", drink=" + drink +
-              ", pee=" + pee +
-              ", endurance Left=" + enduranceLeft +
-              ", Professional Drinker=" + professionalDrinker +
               '}';
    }
 
 
-   @Override
+   /*@Override
    public Integer getRandom(int min, int max) {
       int i = ThreadLocalRandom.current().nextInt(min, max)+1;
       return i;
-   }
+   }*/
 
 
-   @Override
+   /*@Override
    public ArrayList generateTeam() {
       List<Viking> vikingList = new ArrayList<Viking>();
+      Random ran = new Random();
       for (int i=0; i<11; i++){
          vikingList.add(
                  new Viking(
-                         "Viking N° " + i,
-                         getRandom(18,90),
-                         getRandom(50,160),
+                         "Viking N° " + i + 1,
+                         getRandom(18,90), // Allowed age
+                         getRandom(50,160), // Allowed weight
                          new vikingDrinkImpl(),
                          new vikingPeeImpl()
                  )
          );
       }
       return (ArrayList) vikingList;
-   }
+   }*/
 }
 
